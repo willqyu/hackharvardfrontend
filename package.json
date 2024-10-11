@@ -1,0 +1,17 @@
+{
+  "name": "hackharvard2024",
+  "version": "1.0.0",
+  "description": "Project for CS2 team at HackHarvard2024",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "",
+    "backend": "cd hhfrontend && python -m uvicorn main:app --reload ",
+    "install": "concurrently --kill-others  \"cd ./hhfrontend && npm install &\" \"cd ./hhbackend && pip install -r requirements.txt\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CS2",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
