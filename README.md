@@ -1,3 +1,19 @@
+# HackHarvard2024
+Winning team for Hack Harvard 2024
+
+## Copyright
+
+ Copyright (C) 2024 William Yu williamqyu@outlook.com
+ 
+ This file is part of the HackHarvard24 project repo. It is owned by and exclusivly authored by.
+
+ * William Yu
+ * Ina Chun
+ * Madeleine Koh Brutin
+ * Anushka De
+ 
+ The HackHarvard24 project repo can not be copied, distributed, run, or used in any fashion without the express permission of all authors listed above.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
