@@ -29,6 +29,7 @@ const SubmitReport = ({
         const params = new URLSearchParams();
         params.set("type", type);
         params.set("comment", comment);
+        params.set("image", image);
         params.set("timestamp", timestamp.toString());
         params.set("longitude", longitude.toString());
         params.set("latitude", latitude.toString());
