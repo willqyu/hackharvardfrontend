@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiviClick - Political Engagement App</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400&display=swap">
+    <style>
+        body {
+            font-family: 'Bodoni Moda', serif;
+            background-color: #f8f9f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px;
+            background-color: #0e445d;
+            color: white;
+            position: fixed;
+            top: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            margin-left: 100px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .button-container {
+            margin-left: 600px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .button {
+            background-color: white;
+            color: #0e445d;
+            padding: 14px 20px;
+            border: 2px solid #0e445d;
+            border-radius: 5px;
+            text-decoration: none;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #d3d3d3;
+            color: #0e445d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0c435c;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            border-top: 1px solid white;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .content img {
+            width: 150px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 2s forwards; /* Apply fade-in animation */
+            animation-delay: 1s; /* Optional: delay the fade-in for the image */
+        }
+
+        .content h2 {
+            font-size: 2em;
+            margin: 0;
+            color: #0e445d;
+        }
+
+        .content p {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: #333;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CiviClick</h1>
+    <div class="button-container">
+        <a href="map.html" class="button">Go to Map</a>
+        <a href="login.html" class="button">Login</a>
+    </div>
+</header>
+
+<div class="content">
+    <img src="https://cdn.glitch.global/18a5fa3c-87c8-422b-9ee4-6024d75aec59/engage.png?v=1728760049745" alt="Civil Hacker Icon">
+    <h2>Welcome to the Connector Between the People and Politics</h2>
+    <p>CiviClick makes reporting issues easy, keeping communities connected with local leaders.</p>
+</div>
+
+<footer>
+    <p>&copy; 2024 CiviClick. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

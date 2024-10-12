@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400&display=swap">
+    <style>
+        body {
+            font-family: 'Bodoni Moda', serif;
+            background-color: #0e445d;
+            color: #0e445d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            padding : 20px;
+            justify-content: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            padding: 20px;
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 20px;
+            text-align: left;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #0e445d;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .social-button {
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .social-button:hover {
+            background-color: #ddd;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #0e445d;
+            outline: none;
+        }
+
+        button {
+            background-color: #0e445d;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-family: 'Bodoni Moda', serif;
+        }
+
+        button:hover {
+            background-color: #aaa;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #0e445d;
+        }
+
+        .signup-option {
+            text-align: center;
+            margin-top: 20px;
+            color: #0e445d;
+        }
+
+        .signup-link {
+            color: #0e445d;
+            text-decoration: none;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+   <div class="left-panel">
+    <h2>Join CiviClick Today</h2>
+    <p>Enhance Your Community Impact</p>
+    <p>&#10003; Connect with Constituents</p>
+ 
+    <p>&#10003; Track Issues and Provide Updates</p>
+    <p>&#10003; Build Trust and Strengthen Your Support Base</p>
+</div>
+
+    <div class="right-panel">
+        <h2>Log In</h2>
+
+        <div class="social-buttons">
+            <button class="social-button">Google</button>
+            <button class="social-button">Facebook</button>
+            <button class="social-button">GitHub</button>
+        </div>
+
+        <!-- Updated form action to redirect to flipping card page -->
+        <form action="politic.html" method="get">
+            <input type="text" placeholder="Email" name="email" required>
+            <input type="password" placeholder="Password" name="psw" required>
+            <button type="submit">Login</button>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+        </form>
+
+        <div class="signup-option">
+            <p>Don't have an account? <a href="signup.html" class="signup-link">Sign Up</a></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

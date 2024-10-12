@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiviClick - Flipping Cards</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400&display=swap">
+    <style>
+        body {
+            font-family: 'Bodoni Moda', serif;
+            background-color: #f8f9f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px;
+            background-color: #0e445d;
+            color: white;
+            position: fixed;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            margin-left: 200px;
+        }
+
+        .button-container {
+            margin-left: auto;
+            margin-right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .button {
+            background-color: white;
+            color: #0e445d;
+            padding: 14px 20px;
+            border: 2px solid #0e445d;
+            border-radius: 5px;
+            text-decoration: none;
+            font-family: 'Bodoni Moda', serif;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #d3d3d3;
+            color: #0e445d;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 100px;
+            padding: 20px;
+            width: 80%;
+        }
+
+        .card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #0e445d;
+            border-radius: 10px;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .card-front {
+            background-color: white;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .card-back {
+            background-color: #0e445d;
+            color: white;
+            transform: rotateY(180deg);
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0c435c;
+            color: white;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            border-top: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CiviClick</h1>
+    <div class="button-container">
+        <a href="home.html" class="button">Home</a>
+        <a href="map.html" class="button">Map</a>
+        <a href="login.html" class="button">Login</a>
+    </div>
+</header>
+
+<div class="grid-container">
+    <!-- Nine cards in a 3x3 grid with pothole images and random updates -->
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image1.jpg" alt="Pothole Image 1"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #1023</p>
+                <p>Date Created: 10/05/2024</p>
+                <p>Submitted by: John Doe</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image2.jpg" alt="Pothole Image 2"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #2045</p>
+                <p>Date Created: 09/29/2024</p>
+                <p>Submitted by: Jane Smith</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image3.jpg" alt="Pothole Image 3"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #3167</p>
+                <p>Date Created: 09/30/2024</p>
+                <p>Submitted by: Alice Johnson</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image4.jpg" alt="Pothole Image 4"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #4289</p>
+                <p>Date Created: 10/03/2024</p>
+                <p>Submitted by: Bob Brown</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image5.jpg" alt="Pothole Image 5"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #5391</p>
+                <p>Date Created: 10/01/2024</p>
+                <p>Submitted by: Carol White</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image6.jpg" alt="Pothole Image 6"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #6412</p>
+                <p>Date Created: 09/28/2024</p>
+                <p>Submitted by: Dan Black</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image7.jpg" alt="Pothole Image 7"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #7524</p>
+                <p>Date Created: 10/06/2024</p>
+                <p>Submitted by: Eva Green</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image8.jpg" alt="Pothole Image 8"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #8635</p>
+                <p>Date Created: 10/04/2024</p>
+                <p>Submitted by: Frank Blue</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="image9.jpg" alt="Pothole Image 9"> <!-- Replace with actual image URL -->
+            </div>
+            <div class="card-back">
+                <h3>Inquiries</h3>
+                <p>Ticket #9746</p>
+                <p>Date Created: 10/07/2024</p>
+                <p>Submitted by: Grace Yellow</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 CiviClick. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
