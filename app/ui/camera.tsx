@@ -55,15 +55,20 @@ export default function CameraImageCapture() {
     const canvas = canvasRef.current;
     if (video && canvas && isCapturing) {
         const context = canvas.getContext('2d');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context?.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageDataUrl = canvas.toDataURL('image/jpeg');
-        setCapturedImage(imageDataUrl);
-        stopCamera();
-        handleGeoLocation(); 
-        return imageDataUrl
+        if (context) {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageDataUrl = canvas.toDataURL('image/jpeg');
+          setCapturedImage(imageDataUrl);
+          stopCamera();
+
+          handleGeoLocation(); 
+
+          return imageDataUrl
+        }
     }
+    return null;
   };
 
   const sendImageToEndpoint = async (imageDataUrl: string) => {
@@ -205,6 +210,7 @@ export default function CameraImageCapture() {
                 <Button onClick={() => {
                     setCapturedImage("");
                     setComment('');
+                    setAddress('')
                     startCamera()
                 }}>
                     Retake Photo
@@ -213,7 +219,7 @@ export default function CameraImageCapture() {
                     type={reportType}
                     image={capturedImage}
                     comment={comment}
-                    timestamp={0}
+                    timestamp={timestamp ?? 0}
                     latitude={latitude ?? 0}
                     longitude={longitude ?? 0} 
                 />
