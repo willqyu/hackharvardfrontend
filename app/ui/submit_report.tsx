@@ -14,6 +14,9 @@ export interface reportPayload {
   longitude: number;
 }
 
+type withCallback = reportPayload & {
+    onSubmitCallback: () => void;
+};
 
 const SubmitReport = ({
   type,
@@ -21,8 +24,9 @@ const SubmitReport = ({
   comment,
   timestamp,
   longitude,
-  latitude
-}: reportPayload) => {
+  latitude,
+  onSubmitCallback,
+}: withCallback) => {
 
     const sendReportToEndpoint = async (reportData: reportPayload) => {
         console.log("Submit button clicked. Sending report...", reportData);
@@ -39,6 +43,8 @@ const SubmitReport = ({
         if (!response.ok) {
             throw new Error('Failed to upload report');
         }
+
+        onSubmitCallback();
 
         } catch (error) {
         console.error('Error sending image to endpoint:', error);
