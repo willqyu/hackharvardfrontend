@@ -4,12 +4,12 @@ import { backendAPI } from "@/lib/config";
 
 
 export interface reportPayload {
-    type: String,
-    image: String,
-    comment: String,
-    timestamp: Number,
-    latitude: Number,
-    longitude: Number,
+    type: string,
+    image: string,
+    comment: string,
+    timestamp: number,
+    latitude: number,
+    longitude: number,
 }
 
 const SubmitReport = (
