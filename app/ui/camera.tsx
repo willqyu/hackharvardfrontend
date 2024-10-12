@@ -82,8 +82,9 @@ export default function CameraImageCapture() {
       }
 
       const data = await response.json();
+      console.log(data);
       setComment(data.message);
-      setReportType(data.type);
+      setReportType(data.feature);
     } catch (error) {
       console.error('Error sending image to endpoint:', error);
       setComment('Failed to analyze image. Please try again.');
