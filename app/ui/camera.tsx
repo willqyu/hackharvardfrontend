@@ -7,14 +7,20 @@ import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
 
 export default function CameraImageCapture() {
-  const [capturedImage, setCapturedImage] = useState<string>("");
-  const [isCapturing, setIsCapturing] = useState<boolean>(false);
-  const [comment, setComment] = useState<string>('');
-  const [reportType, setReportType] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [capturedImage, setCapturedImage] = useState("");
+  const [isCapturing, setIsCapturing] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [comment, setComment] = useState('');
+  const [reportType, setReportType] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [address, setAddress] = useState('');
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [timestamp, setTimestamp] = useState<number | null>(null);
+
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);;
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
   const startCamera = async () => {
@@ -55,7 +61,7 @@ export default function CameraImageCapture() {
         const imageDataUrl = canvas.toDataURL('image/jpeg');
         setCapturedImage(imageDataUrl);
         stopCamera();
-        
+        handleGeoLocation(); 
         return imageDataUrl
     }
   };
@@ -99,6 +105,46 @@ export default function CameraImageCapture() {
     setComment(e.target.value);
   };
 
+  const handleGeoLocation = () => {
+    if (!navigator.geolocation) {
+        console.error("Geolocation is not supported by your browser");
+        return;
+    }
+    setIsLoading(true);
+    navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        const timestamp = position.timestamp
+        const address = await getAddressFromCoords(latitude, longitude);
+        setLatitude(latitude);
+        setLongitude(longitude);
+        setTimestamp(timestamp);
+        setAddress(address);
+        const fetchedAddress = await getAddressFromCoords(latitude, longitude);
+        setAddress(fetchedAddress);
+        // sendLocationToBackend(latitude, longitude);
+        setIsLoading(false);
+    }, (error) => {
+        console.error("Error fetching geolocation:", error);
+        setIsLoading(false);
+    });
+  };
+
+  // function sendLocationToBackend(lat, lon) {
+  //     // existing send location to backend code
+  // };
+
+  async function getAddressFromCoords(lat, lon) {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+      try {
+          const response = await fetch(url);
+          const data = await response.json();
+          return data.display_name;
+      } catch (error) {
+          console.error("Error fetching address:", error);
+          return "Unable to retrieve address";
+      }
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -115,6 +161,7 @@ export default function CameraImageCapture() {
                         if (image){
                             await sendImageToEndpoint(image)
                         }
+
                     }
                 } disabled={isLoading}>
                 <Camera className="mr-2 h-4 w-4" /> Capture
@@ -143,7 +190,11 @@ export default function CameraImageCapture() {
             </div>
             
           </div>
-        )}
+        )}{/* Display latitude and longitude */}
+        <div className="mt-4">
+          <p>{address || "Loading address..."}</p>
+        </div>
+
       </CardContent>
       <CardFooter className="flex justify-between">
         {!capturedImage ? (
@@ -162,8 +213,8 @@ export default function CameraImageCapture() {
                     image={capturedImage}
                     comment={comment}
                     timestamp={0}
-                    latitude={0}
-                    longitude={0}
+                    latitude={latitude ?? 0}
+                    longitude={longitude ?? 0} 
                 />
             </div>
         )}
