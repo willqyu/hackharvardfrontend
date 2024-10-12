@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CiviClick - Political Engagement App</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400&display=swap">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Lato:300,400|Poppins:300,400,800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            overflow: hidden;
+            background-color: #f8f9f5; /* Light pastel background */
+            color: #333;
+        }
+
+        header {
+            background-color: #0e445d; /* Dark header color */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #577888; /* Soft line below header */
+            position: relative;
+            z-index: 1; /* Ensure header is above other elements */
+        }
+
+        h1 {
+            font-family: "Bodoni MT", Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+            font-size: 24px;
+            font-weight: 400; /* Thinner weight */
+            line-height: 26.4px;
+            opacity: 0; /* Initial opacity for fade-in */
+            animation: fadeIn 2s forwards; /* Apply fade-in animation */
+            animation-delay: 1s; /* Delay before the animation starts */
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0; /* Start transparent */
+                transform: translateY(-20px); /* Optional: Slight upward movement */
+            }
+            100% {
+                opacity: 1; /* Fully visible */
+                transform: translateY(0); /* Reset position */
+            }
+        }
+
+        main {
+            position: relative;
+            z-index: 0; /* Keep main content behind header */
+            margin: 20px 0; /* Add some vertical spacing */
+        }
+
+        iframe {
+            border: 2px solid white; /* Thin white border for the iframe */
+            width: calc(100% + 100px); /* Increase width to fill more space */
+            height: 480px; /* Set iframe height */
+            margin-top: -100px; /* Shift the iframe up higher into the header */
+            margin-left: -50px; /* Shift the iframe to the left */
+            position: relative;
+            left: 50%; /* Center the iframe */
+            transform: translateX(-50%); /* Pull it back to center */
+            z-index: 0; /* Keep iframe behind header */
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #0c435c; /* Dark footer color */
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            border-top: 1px solid white; /* Thin white border on top of footer */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CiviClick</h1>
+    <p>Championing Civic Engagement with Every Click</p>
+</header>
+
+<main>
+    <iframe src="https://www.google.com/maps/d/embed?mid=1kyHgQUl8kytTQAaM9bNGWtqx8fiKCOw&ehbc=2E312F&z=8" width="640" height="480"></iframe> <!-- Ensure you set the correct KML link -->
+</main>
+
+<footer>
+    <p>&copy; 2024 CiviClick. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
