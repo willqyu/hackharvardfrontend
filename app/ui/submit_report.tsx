@@ -25,7 +25,7 @@ const SubmitReport = ({
   onReportSubmitted,
 }: SubmitReportProps) => {
   const sendReportToEndpoint = async (reportData: reportPayload) => {
-    console.log(reportData);
+    console.log("Submit button clicked. Sending report...", reportData);
 
     try {
       const response = await fetch(`${backendAPI}/api/submit-report`, {
