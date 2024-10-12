@@ -5,10 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import LoadingSpinner from './spinner';
 import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
-
-interface CameraProps {
-  onReportSubmit: () => void;
-}
+import Letter from './letter';
 
 export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState("");
@@ -25,6 +22,11 @@ export default function CameraImageCapture() {
   const videoRef = useRef<HTMLVideoElement | null>(null);;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  const [showLetter, setShowLetter] = useState(false); // Track letter visibility
+  const letterRef = useRef<HTMLDivElement>(null); // Ref to scroll to the letter
+  const [title, setTitle] = useState(''); // Title for Letter component
+
 
   const startCamera = async () => {
     try {
@@ -91,6 +93,12 @@ export default function CameraImageCapture() {
       console.log(data);
       setComment(data.message);
       setReportType(data.feature);
+
+      // to pop to letter
+      setShowLetter(true);
+      setTimeout(() => letterRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+
+
     } catch (error) {
       console.error('Error sending image to endpoint:', error);
       setComment('Failed to analyze image. Please try again.');
@@ -161,74 +169,78 @@ export default function CameraImageCapture() {
           <div className="relative bg-gray-100 rounded-lg overflow-hidden h-[600px]">
             <video ref={videoRef} autoPlay playsInline className="w-full h-full object-fit" />
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              <Button onClick={ async () => {
-                        // Send image to endpoint and get response
-                        const image = captureImage();
-                        if (image){
-                            await sendImageToEndpoint(image)
-                        }
-
-                    }
-                } disabled={isLoading}>
+              <Button
+                onClick={async () => {
+                  const image = captureImage();
+                  if (image) {
+                    await sendImageToEndpoint(image);
+                  }
+                }}
+                disabled={isLoading}
+              >
                 <Camera className="mr-2 h-4 w-4" /> Capture
               </Button>
               <Button onClick={toggleCamera} variant="outline">
-                <RotateCw className="h-4 w-4"/>
+                <RotateCw className="h-4 w-4" />
               </Button>
             </div>
           </div>
         ) : (
           <div className="space-y-4">
             <img src={capturedImage} alt="Captured" className="w-full rounded-lg" />
-            {isLoading ? (
-                <LoadingSpinner/>
-            ) : (
-                <p>Add a comment to describe the issue, or use the AI-generated comment. </p>
-            )}
-            <div className=' border-gray-300 border-2 box-border p-2 rounded-lg overflow-hidden'>
-                <textarea
-                    className='h-[200px] w-full focus:outline-none text-sm'
-                    placeholder={isLoading ? "Analyzing image..." : "Add a comment..."}
-                    value={comment}
-                    onChange={handleCommentChange}
-                    disabled={isLoading}
-                />
+            {isLoading ? <LoadingSpinner /> : <p>Add a comment to describe the issue, or use the AI-generated comment.</p>}
+            <div className="border-gray-300 border-2 box-border p-2 rounded-lg overflow-hidden">
+              <textarea
+                className="h-[200px] w-full focus:outline-none text-sm"
+                placeholder={isLoading ? 'Analyzing image...' : 'Add a comment...'}
+                value={comment}
+                onChange={handleCommentChange}
+                disabled={isLoading}
+              />
             </div>
-            
           </div>
-        )}{/* Display latitude and longitude */}
+        )}
         <div className="mt-4">
-          {capturedImage && address && (
-            <p>Address: {address}</p>
-          )}
+          {capturedImage && address && <p>Address: {address}</p>}
         </div>
-
       </CardContent>
+  
       <CardFooter className="flex justify-between">
         {!capturedImage ? (
           <Button onClick={startCamera}>Start Camera</Button>
         ) : (
-            <div className='flex justify-between w-full'>
-                <Button onClick={() => {
-                    setCapturedImage("");
-                    setComment('');
-                    setAddress('')
-                    startCamera()
-                }}>
-                    Retake Photo
-                </Button>
-                <SubmitReport 
-                    type={reportType}
-                    image={capturedImage}
-                    comment={comment}
-                    timestamp={timestamp ?? 0}
-                    latitude={latitude ?? 0}
-                    longitude={longitude ?? 0} 
-                />
-            </div>
+          <div className="flex justify-between w-full">
+            <Button
+              onClick={() => {
+                setCapturedImage('');
+                setComment('');
+                setAddress('');
+                startCamera();
+              }}
+            >
+              Retake Photo
+            </Button>
+            <SubmitReport
+              type={reportType}
+              image={capturedImage}
+              comment={comment}
+              timestamp={timestamp ?? 0}
+              latitude={latitude ?? 0}
+              longitude={longitude ?? 0}
+            />
+          </div>
         )}
       </CardFooter>
+  
+      {/* Letter component, rendered conditionally */}
+      {showLetter && (
+        <div ref={letterRef}>
+          <Letter recipient="John Doe" initialTitle={title} initialBody={comment} />
+        </div>
+      )}
+  
       <canvas ref={canvasRef} style={{ display: 'none' }} />
     </Card>
   );
+  
 }

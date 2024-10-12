@@ -15,31 +15,31 @@ export default function Letter({
   const [body, setBody] = useState(initialBody);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchGeneratedBody = async () => {
-      try {
-        const resposne = await fetch("/api/generate-body", {
-          method: "POST", 
-          headers: {"Content-Type": "application/json"}, 
-          body: JSON.stringify({ prompt: "Write a detailed report body." })
-        });
+  // useEffect(() => {
+  //   const fetchGeneratedBody = async () => {
+  //     try {
+  //       const response = await fetch("/api/generate-body", {
+  //         method: "POST", 
+  //         headers: {"Content-Type": "application/json"}, 
+  //         body: JSON.stringify({ prompt: "Write a detailed report body." })
+  //       });
 
-        if (!response.ok) {
-          throw new Error("Failed to generate body");
-        }
+  //       if (!response.ok) {
+  //         throw new Error("Failed to generate body");
+  //       }
 
-        const data = await Response.json();
-        setBody(data.body);
-      } catch (error) {
-        console.error("Error fetching generated body:", error);
-        setBody("Failed to load body. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       const data = await Response.json();
+  //       setBody(data.body);
+  //     } catch (error) {
+  //       console.error("Error fetching generated body:", error);
+  //       setBody("Failed to load body. Please try again.");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchGeneratedBody(); // call the backend on component mount
-  }, []);
+  //   fetchGeneratedBody(); // call the backend on component mount
+  // }, []);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);

@@ -23,18 +23,6 @@ const SubmitReport = ({
   longitude,
   latitude
 }: reportPayload) => {
-    const router = useRouter();
-
-    const createQueryString = () => {
-        const params = new URLSearchParams();
-        params.set("type", type);
-        params.set("comment", comment);
-        params.set("image", image);
-        params.set("timestamp", timestamp.toString());
-        params.set("longitude", longitude.toString());
-        params.set("latitude", latitude.toString());
-        return params.toString();
-    }
 
     const sendReportToEndpoint = async (reportData: reportPayload) => {
         console.log("Submit button clicked. Sending report...", reportData);
@@ -51,10 +39,6 @@ const SubmitReport = ({
         if (!response.ok) {
             throw new Error('Failed to upload report');
         }
-
-        router.push(
-            "/email?" + createQueryString()
-        );
 
         } catch (error) {
         console.error('Error sending image to endpoint:', error);
