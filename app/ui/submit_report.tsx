@@ -3,27 +3,28 @@ import { Button } from '@/components/ui/button';
 import { backendAPI } from "@/lib/config";
 
 
-interface reportPayload {
+export interface reportPayload {
     type: String,
-    image_data: String,
+    image: String,
     comment: String,
     timestamp: Number,
-    Lat: Number,
-    Long: Number,
+    latitude: Number,
+    longitude: Number,
 }
 
 const SubmitReport = (
-    report_data: reportPayload
+    {type, image, comment, timestamp, latitude, longitude} : reportPayload
 ) => {
 
-    const sendReportToEndpoint = async (report_data: reportPayload) => {
+    const sendReportToEndpoint = async (reportData: reportPayload) => {
+        console.log(reportData);
         try {
           const response = await fetch(backendAPI + '/api/submit-report', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(report_data),
+            body: JSON.stringify(reportData),
           });
     
           if (!response.ok) {
@@ -38,7 +39,9 @@ const SubmitReport = (
     return (
         <Button onClick={
             () => {
-                sendReportToEndpoint(report_data)
+                sendReportToEndpoint(
+                    {type, image, comment, timestamp, latitude, longitude}
+                )
             }
         }>Submit Report</Button>
     )

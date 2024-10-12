@@ -7,9 +7,10 @@ import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
 
 export default function CameraImageCapture() {
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [capturedImage, setCapturedImage] = useState<string>("");
   const [isCapturing, setIsCapturing] = useState<boolean>(false);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState<string>('');
+  const [reportType, setReportType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -76,6 +77,7 @@ export default function CameraImageCapture() {
 
       const data = await response.json();
       setComment(data.message);
+      setReportType(data.type);
     } catch (error) {
       console.error('Error sending image to endpoint:', error);
       setComment('Failed to analyze image. Please try again.');
@@ -149,13 +151,20 @@ export default function CameraImageCapture() {
         ) : (
             <div className='flex justify-between w-full'>
                 <Button onClick={() => {
-                    setCapturedImage(null);
+                    setCapturedImage("");
                     setComment('');
                     startCamera()
                 }}>
                     Retake Photo
                 </Button>
-                <SubmitReport/>
+                <SubmitReport 
+                    type={reportType}
+                    image={capturedImage}
+                    comment={comment}
+                    timestamp={0}
+                    latitude={0}
+                    longitude={0}
+                />
             </div>
         )}
       </CardFooter>
