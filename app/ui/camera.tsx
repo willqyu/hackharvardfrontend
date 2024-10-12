@@ -6,7 +6,11 @@ import LoadingSpinner from './spinner';
 import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
 
-export default function CameraImageCapture() {
+interface CameraProps {
+  onReportSubmit: () => void;
+}
+
+export default function CameraImageCapture({ onReportSubmit }: CameraProps) {
   const [capturedImage, setCapturedImage] = useState("");
   const [isCapturing, setIsCapturing] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
@@ -17,7 +21,6 @@ export default function CameraImageCapture() {
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
   const [timestamp, setTimestamp] = useState<number | null>(null);
-
 
   const videoRef = useRef<HTMLVideoElement | null>(null);;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -58,14 +61,12 @@ export default function CameraImageCapture() {
         if (context) {
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
-          context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
           const imageDataUrl = canvas.toDataURL('image/jpeg');
           setCapturedImage(imageDataUrl);
           stopCamera();
-
           handleGeoLocation(); 
-
-          return imageDataUrl
+          return imageDataUrl;
         }
     }
     return null;
@@ -118,14 +119,12 @@ export default function CameraImageCapture() {
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(async (position) => {
         const { latitude, longitude } = position.coords;
-        const timestamp = position.timestamp
+        const timestamp = position.timestamp;
         const address = await getAddressFromCoords(latitude, longitude);
         setLatitude(latitude);
         setLongitude(longitude);
         setTimestamp(timestamp);
         setAddress(address);
-        const fetchedAddress = await getAddressFromCoords(latitude, longitude);
-        setAddress(fetchedAddress);
         // sendLocationToBackend(latitude, longitude);
         setIsLoading(false);
     }, (error) => {
@@ -149,6 +148,7 @@ export default function CameraImageCapture() {
           return "Unable to retrieve address";
       }
   };
+
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -197,7 +197,9 @@ export default function CameraImageCapture() {
           </div>
         )}{/* Display latitude and longitude */}
         <div className="mt-4">
-          <p>{address || "Loading address..."}</p>
+          {capturedImage && address && (
+            <p>Address: {address}</p>
+          )}
         </div>
 
       </CardContent>
@@ -221,6 +223,7 @@ export default function CameraImageCapture() {
                     timestamp={timestamp ?? 0}
                     latitude={latitude ?? 0}
                     longitude={longitude ?? 0} 
+                    onReportSubmitted={onReportSubmit}
                 />
             </div>
         )}
