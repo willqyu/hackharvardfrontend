@@ -1,6 +1,9 @@
+"use client"
+
 import React from "react";
 import { Button } from '@/components/ui/button';
 import { backendAPI } from "@/lib/config";
+import { useRouter } from "next/navigation";
 
 export interface reportPayload {
   type: string;
@@ -11,40 +14,51 @@ export interface reportPayload {
   longitude: number;
 }
 
-interface SubmitReportProps extends reportPayload {
-  onReportSubmitted: () => void;
-}
 
 const SubmitReport = ({
   type,
   image,
   comment,
   timestamp,
-  latitude,
   longitude,
-  onReportSubmitted,
-}: SubmitReportProps) => {
-  const sendReportToEndpoint = async (reportData: reportPayload) => {
-    console.log("Submit button clicked. onReportSubmitted is", onReportSubmitted);
+  latitude
+}: reportPayload) => {
+    const router = useRouter();
 
-    try {
-      const response = await fetch(`${backendAPI}/api/submit-report`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(reportData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to upload report');
-      }
-
-      onReportSubmitted();
-    } catch (error) {
-      console.error('Error sending image to endpoint:', error);
+    const createQueryString = () => {
+        const params = new URLSearchParams();
+        params.set("type", type);
+        params.set("comment", comment);
+        params.set("timestamp", timestamp.toString());
+        params.set("longitude", longitude.toString());
+        params.set("latitude", latitude.toString());
+        return params.toString();
     }
-  };
+
+    const sendReportToEndpoint = async (reportData: reportPayload) => {
+        console.log("Submit button clicked. Sending report...", reportData);
+
+        try {
+        const response = await fetch(`${backendAPI}/api/submit-report`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reportData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to upload report');
+        }
+
+        router.push(
+            "/email?" + createQueryString()
+        );
+
+        } catch (error) {
+        console.error('Error sending image to endpoint:', error);
+        }
+    };
 
   return (
     <Button
