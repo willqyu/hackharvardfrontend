@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import LoadingSpinner from './spinner';
 import SubmitReport from './submit_report';
+import { backendAPI } from "@/lib/config";
 
 export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -61,7 +62,7 @@ export default function CameraImageCapture() {
   const sendImageToEndpoint = async (imageDataUrl: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/describe-image', {
+      const response = await fetch(backendAPI + '/api/describe-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
