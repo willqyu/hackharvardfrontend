@@ -1,50 +1,66 @@
+"use client"
+
 import React from "react";
 import { Button } from '@/components/ui/button';
 import { backendAPI } from "@/lib/config";
-
+import { useRouter } from "next/navigation";
 
 export interface reportPayload {
-    type: string,
-    image: string,
-    comment: string,
-    timestamp: number,
-    latitude: number,
-    longitude: number,
+  type: string;
+  image: string;
+  comment: string;
+  timestamp: number;
+  latitude: number;
+  longitude: number;
 }
 
-const SubmitReport = (
-    {type, image, comment, timestamp, latitude, longitude} : reportPayload
-) => {
+
+const SubmitReport = ({
+  type,
+  image,
+  comment,
+  timestamp,
+  longitude,
+  latitude
+}: reportPayload) => {
 
     const sendReportToEndpoint = async (reportData: reportPayload) => {
-        console.log(reportData);
+        console.log("Submit button clicked. Sending report...", reportData);
+
         try {
-          const response = await fetch(backendAPI + '/api/submit-report', {
+        const response = await fetch(`${backendAPI}/api/submit-report`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
             },
             body: JSON.stringify(reportData),
-          });
-    
-          if (!response.ok) {
+        });
+
+        if (!response.ok) {
             throw new Error('Failed to upload report');
-          }
+        }
 
         } catch (error) {
-          console.error('Error sending image to endpoint:', error);
+        console.error('Error sending image to endpoint:', error);
         }
-      };
+    };
 
-    return (
-        <Button onClick={
-            () => {
-                sendReportToEndpoint(
-                    {type, image, comment, timestamp, latitude, longitude}
-                )
-            }
-        }>Submit Report</Button>
-    )
-}
+  return (
+    <Button
+      onClick={() =>
+        sendReportToEndpoint({
+          type,
+          image,
+          comment,
+          timestamp,
+          latitude,
+          longitude,
+        })
+      }
+    >
+      Submit Report
+    </Button>
+  );
+};
 
 export default SubmitReport;

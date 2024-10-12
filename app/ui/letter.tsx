@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface LetterProps {
   recipient: string;
@@ -14,6 +14,32 @@ export default function Letter({
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
   const [isLoading, setIsLoading] = useState(false);
+
+  // useEffect(() => {
+  //   const fetchGeneratedBody = async () => {
+  //     try {
+  //       const response = await fetch("/api/generate-body", {
+  //         method: "POST", 
+  //         headers: {"Content-Type": "application/json"}, 
+  //         body: JSON.stringify({ prompt: "Write a detailed report body." })
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to generate body");
+  //       }
+
+  //       const data = await Response.json();
+  //       setBody(data.body);
+  //     } catch (error) {
+  //       console.error("Error fetching generated body:", error);
+  //       setBody("Failed to load body. Please try again.");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchGeneratedBody(); // call the backend on component mount
+  // }, []);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -36,7 +62,7 @@ export default function Letter({
       <label className="text-xs text-gray-500 mb-1">Title</label>
       <input
         className="mb-4 p-2 border rounded-lg text-sm"
-        placeholder={isLoading ? "Title loading..." : "Enter the title..."}
+        placeholder={isLoading ? ("Title loading...") : "Enter the title..."}
         value={title}
         onChange={handleTitleChange}
         disabled={isLoading}
