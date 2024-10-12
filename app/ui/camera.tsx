@@ -133,7 +133,7 @@ export default function CameraImageCapture() {
   //     // existing send location to backend code
   // };
 
-  async function getAddressFromCoords(lat, lon) {
+  async function getAddressFromCoords(lat: number, lon: number) {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
       try {
           const response = await fetch(url);
