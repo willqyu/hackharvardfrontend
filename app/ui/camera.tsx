@@ -10,7 +10,7 @@ interface CameraProps {
   onReportSubmit: () => void;
 }
 
-export default function CameraImageCapture({ onReportSubmit }: CameraProps) {
+export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState("");
   const [isCapturing, setIsCapturing] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
@@ -224,7 +224,6 @@ export default function CameraImageCapture({ onReportSubmit }: CameraProps) {
                     timestamp={timestamp ?? 0}
                     latitude={latitude ?? 0}
                     longitude={longitude ?? 0} 
-                    onReportSubmitted={onReportSubmit}
                 />
             </div>
         )}
