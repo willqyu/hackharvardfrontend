@@ -1,41 +1,61 @@
 import React, { useState, useRef } from 'react';
-import { Camera } from 'lucide-react';
+import { Camera, RotateCw  } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isCapturing, setIsCapturing] = useState<boolean>(false);
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        setIsCapturing(false);
+        if (streamRef.current) {
+          const tracks = streamRef.current.getTracks();
+          tracks.forEach(track => track.stop());
+        }
+  
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode }
+        });
+        
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          setIsCapturing(true);
+        }
+        streamRef.current = stream;
+      } catch (err) {
+        console.error("Error accessing the camera:", err);
       }
-    } catch (err) {
-      console.error("Error accessing the camera:", err);
-    }
+  };
+
+  const toggleCamera = () => {
+    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
+    startCamera();
   };
 
   const captureImage = async () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    if (video && canvas) {
-      const context = canvas.getContext('2d');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context?.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageDataUrl = canvas.toDataURL('image/jpeg');
-      setCapturedImage(imageDataUrl);
-      stopCamera();
+    if (video && canvas && isCapturing) {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context?.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageDataUrl = canvas.toDataURL('image/jpeg');
+        setCapturedImage(imageDataUrl);
+        stopCamera();
 
-      // Send image to endpoint and get response
-      await sendImageToEndpoint(imageDataUrl);
+        // Send image to endpoint and get response
+        await sendImageToEndpoint(imageDataUrl);
+        
     }
   };
 
@@ -65,11 +85,11 @@ export default function CameraImageCapture() {
   };
 
   const stopCamera = () => {
-    const video = videoRef.current;
-    if (video && video.srcObject && 'getTracks' in video.srcObject) {
-      const stream = video.srcObject as MediaStream;
-      const tracks = stream.getTracks();
+    if (streamRef.current) {
+      const tracks = streamRef.current.getTracks();
       tracks.forEach(track => track.stop());
+      streamRef.current = null;
+      setIsCapturing(false);
     }
   };
 
@@ -84,15 +104,16 @@ export default function CameraImageCapture() {
       </CardHeader>
       <CardContent>
         {!capturedImage ? (
-          <div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-            <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
-            <Button 
-              onClick={captureImage} 
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
-              disabled={isLoading}
-            >
-              <Camera className="mr-2 h-4 w-4" /> Capture
-            </Button>
+          <div className="relative bg-gray-100 rounded-lg overflow-hidden h-[600px]">
+            <video ref={videoRef} autoPlay playsInline className="w-full h-full object-fit" />
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+              <Button onClick={captureImage} disabled={isLoading}>
+                <Camera className="mr-2 h-4 w-4" /> Capture
+              </Button>
+              <Button onClick={toggleCamera} variant="outline">
+                <RotateCw className="h-4 w-4"/>
+              </Button>
+            </div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -114,6 +135,7 @@ export default function CameraImageCapture() {
           <Button onClick={() => {
             setCapturedImage(null);
             setComment('');
+            startCamera()
           }}>
             Retake Photo
           </Button>
