@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image";
 import CameraImageCapture from "./ui/camera";
 
 export default function Home() {
