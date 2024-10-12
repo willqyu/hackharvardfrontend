@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { Camera, RotateCw  } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import LoadingSpinner from './spinner';
+import SubmitReport from './submit_report';
 
 export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export default function CameraImageCapture() {
     startCamera();
   };
 
-  const captureImage = async () => {
+  const captureImage = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (video && canvas && isCapturing) {
@@ -52,10 +53,8 @@ export default function CameraImageCapture() {
         const imageDataUrl = canvas.toDataURL('image/jpeg');
         setCapturedImage(imageDataUrl);
         stopCamera();
-
-        // Send image to endpoint and get response
-        await sendImageToEndpoint(imageDataUrl);
         
+        return imageDataUrl
     }
   };
 
@@ -93,7 +92,7 @@ export default function CameraImageCapture() {
     }
   };
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
@@ -107,7 +106,14 @@ export default function CameraImageCapture() {
           <div className="relative bg-gray-100 rounded-lg overflow-hidden h-[600px]">
             <video ref={videoRef} autoPlay playsInline className="w-full h-full object-fit" />
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              <Button onClick={captureImage} disabled={isLoading}>
+              <Button onClick={ async () => {
+                        // Send image to endpoint and get response
+                        const image = captureImage();
+                        if (image){
+                            await sendImageToEndpoint(image)
+                        }
+                    }
+                } disabled={isLoading}>
                 <Camera className="mr-2 h-4 w-4" /> Capture
               </Button>
               <Button onClick={toggleCamera} variant="outline">
@@ -118,13 +124,21 @@ export default function CameraImageCapture() {
         ) : (
           <div className="space-y-4">
             <img src={capturedImage} alt="Captured" className="w-full rounded-lg" />
-            <Input
-              type="text"
-              placeholder={isLoading ? "Analyzing image..." : "Add a comment..."}
-              value={comment}
-              onChange={handleCommentChange}
-              disabled={isLoading}
-            />
+            {isLoading ? (
+                <LoadingSpinner/>
+            ) : (
+                <p>Add a comment to describe the issue, or use the AI-generated comment. </p>
+            )}
+            <div className=' border-gray-300 border-2 box-border p-2 rounded-lg overflow-hidden'>
+                <textarea
+                    className='h-[200px] w-full focus:outline-none text-sm'
+                    placeholder={isLoading ? "Analyzing image..." : "Add a comment..."}
+                    value={comment}
+                    onChange={handleCommentChange}
+                    disabled={isLoading}
+                />
+            </div>
+            
           </div>
         )}
       </CardContent>
@@ -132,13 +146,16 @@ export default function CameraImageCapture() {
         {!capturedImage ? (
           <Button onClick={startCamera}>Start Camera</Button>
         ) : (
-          <Button onClick={() => {
-            setCapturedImage(null);
-            setComment('');
-            startCamera()
-          }}>
-            Retake Photo
-          </Button>
+            <div className='flex justify-between w-full'>
+                <Button onClick={() => {
+                    setCapturedImage(null);
+                    setComment('');
+                    startCamera()
+                }}>
+                    Retake Photo
+                </Button>
+                <SubmitReport/>
+            </div>
         )}
       </CardFooter>
       <canvas ref={canvasRef} style={{ display: 'none' }} />
