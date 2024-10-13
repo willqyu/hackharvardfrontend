@@ -36,9 +36,7 @@ export default function Home() {
           </li>
         </ul>
       </nav>
-
       <CameraImageCapture/>
-      <SlidingReel/>
     </div>
   );
 }
