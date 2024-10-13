@@ -50,7 +50,7 @@ const MessageFetcher = () => {
   }, []);
 
   return (
-    <div className="p-4 h-[100vh]">
+    <div className="h-screen flex flex-col items-center justify-center bg-gradient-to-r from-black to-gray-950">
       <NotificationWindow messages={messages} />
       <GradientGauge value={avgSentiment}/>
     </div>
@@ -58,17 +58,21 @@ const MessageFetcher = () => {
 };
 
 
-const NotificationWindow = ({ messages }) => {
-  return (
-    <div className="border border-gray-300 rounded-lg p-4 h-60 overflow-y-auto w-[90%] h-[75vh] m-auto">
-      <h1 className="text-2xl font-bold mb-4">Live Tweet Analysis</h1>
-      {messages.map((message, index) => (
-        <div key={index} className="mb-2 p-2 bg-gray-100 rounded p-4">
-          {message}
-        </div>
-      ))}
-    </div>
-  );
-};
+const NotificationWindow = ({ messages }) => (
+  <div className=" border border-black shadow-lg shadow-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 rounded-2xl p-4 overflow-y-auto w-11/12 h-3/4 m-auto">
+    <h1 className="text-3xl font-bold mb-4 text-center shadow-xl text-white">Live Tweet Analysis</h1>
+    {messages.map((message, index) => (
+      <div key={index} 
+      
+      className="flex items-center shadow-inner border border-x-gray-400 mb-2 p-4 bg-white rounded-2xl"
+      >
+        <div className="w-6 h-6 bg-gradient-to-tr from-slate-700 to-slate-800 shadow-2xl drop-shadow rounded-full flex-shrink-0 mr-4"></div>
+        <span className="flex-grow">{message}</span>
+        
+      </div>
+    ))}
+  </div>
+);
+
 
 export default MessageFetcher;
