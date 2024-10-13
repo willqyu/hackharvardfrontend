@@ -15,21 +15,21 @@ export default function Home() {
         <ul className="flex justify-evenly items-center space-x-4">
           <li>
             <button className="= hover:bg-gray-900 text-white py-2 px-2 rounded-full shadow-xl">
-              <Link href="#map" scroll={false}>
+              <Link href="map" scroll={false}>
                 Dashboard
               </Link>
             </button>
           </li>
           <li>
             <button className=" hover:bg-black text-white py-2 px-4 rounded-full shadow-xl">
-              <Link href="#tweets" scroll={false}>
+              <Link href="tweets" scroll={false}>
                 Sentiment Feed
               </Link>
             </button>
           </li>
           <li>
             <button className=" hover:bg-black text-white py-2 px-4 rounded-full shadow-xl">
-              <Link href="#mappage" scroll={false}>
+              <Link href="mappage" scroll={false}>
                 Maps
               </Link>
             </button>
