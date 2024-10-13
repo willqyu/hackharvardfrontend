@@ -127,6 +127,7 @@ export default function CameraImageCapture() {
         throw new Error('Failed to generate letter');
       }
       const data = await response.json();
+      setTitle(data.subject)
       setLetter(data.message);
       setShowLetter(true);
       setTimeout(() => letterRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
@@ -150,7 +151,6 @@ export default function CameraImageCapture() {
         console.error("Geolocation is not supported by your browser");
         return;
     }
-    setIsLoading(true);
     navigator.geolocation.getCurrentPosition(async (position) => {
         const { latitude, longitude } = position.coords;
         const timestamp = position.timestamp;
@@ -160,10 +160,10 @@ export default function CameraImageCapture() {
         setTimestamp(timestamp);
         setAddress(address);
         // sendLocationToBackend(latitude, longitude);
-        setIsLoading(false);
+        
     }, (error) => {
         console.error("Error fetching geolocation:", error);
-        setIsLoading(false);
+        
     });
   };
 
@@ -185,8 +185,9 @@ export default function CameraImageCapture() {
 
 
   return (
-    <div className="min-h-screen h-screen w-screen overflow-y-auto bg-transparent">
+    <div className="min-h-screen h-content w-content bg-transparent">
       <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-3xl p-4 mx-auto">
+        
         <h1 className={`${camStarted ? 'text-xl' : 'text-7xl h-72'} md:text-5xl mt-52 font-bold text-white `}>
           <Typewriter 
             options={{
@@ -204,34 +205,6 @@ export default function CameraImageCapture() {
             Start Camera
           </button>
         )}
-
-      {camStarted &&  (
-        <div className={`transition-all duration-700 ease-in-out transform ${
-          isCapturing ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-        } flex justify-between space-x-8 mt-4`}
-      >
-        <Button
-          className=" border-slate-200 border-2 text-white bg-transparent px-6 py-2 rounded-2xl shadow- hover:bg-slate-200 hover:text-white transition-all duration-300 shadow-slate-700"
-          onClick={() => {
-            setCapturedImage('');
-            setComment('');
-            setAddress('');
-            startCamera();
-          }}
-        >
-          Retake Photo
-        </Button>
-  
-        <SubmitReport
-          type={reportType}
-          image={capturedImage}
-          comment={comment}
-          timestamp={timestamp ?? 0}
-          latitude={latitude ?? 0}
-          longitude={longitude ?? 0}
-        />
-      </div>
-      )}
     
         {!capturedImage ? (
           <div className="relative rounded-lg">
@@ -259,6 +232,9 @@ export default function CameraImageCapture() {
                 >
                   <Camera className="mr-2 h-4 w-4 bg-gradient-to-r from-slate-800 to-slate-95 opacity-45" /> Capture
                 </Button>
+                <Button onClick={toggleCamera} variant="outline">
+                    <RotateCw className="h-4 w-4" />
+                </Button>
               </div>)}
           </div>
         ) : (
@@ -280,19 +256,50 @@ export default function CameraImageCapture() {
             ) : <></>}
             <textarea
               className="h-[100px] w-full p-4 shadow-inner border rounded-2xl focus:outline-none text-md bg-slate-500/10 text-white placeholder-white"
-              placeholder="Add a comment..."
+              placeholder={isLoading ? "Analyzing image..." : "Add a comment..."}
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={handleCommentChange}
               disabled={isLoading}
             />
 
           </div>
         )}
 
+{camStarted &&  (
+        <div className={`transition-all duration-700 ease-in-out transform ${
+          capturedImage ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+        } flex justify-between space-x-8 mt-4`}
+      >
+        <Button
+          className=" border-slate-200 border-2 text-white bg-transparent px-6 py-2 rounded-2xl shadow- hover:bg-slate-200 hover:text-white transition-all duration-300 shadow-slate-700"
+          onClick={() => {
+            setLetter('');
+            setShowLetter(false);
+            setCapturedImage('');
+            setComment('');
+            setAddress('');
+            startCamera();
+          }}
+        >
+          Retake Photo
+        </Button>
+  
+        <SubmitReport
+          type={reportType}
+          image={capturedImage}
+          comment={comment}
+          timestamp={timestamp ?? 0}
+          latitude={latitude ?? 0}
+          longitude={longitude ?? 0}
+          onSubmitCallback={getLetter}
+        />
+      </div>
+      )}
+
 
         {showLetter && (
           <div ref={letterRef}>
-            <Letter recipient="John Doe" initialTitle={title} initialBody={comment} />
+            <Letter recipient="John Doe" initialTitle={title} initialBody={letterContents} />
           </div>
         )}
 
