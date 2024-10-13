@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
-// import ticketsHtml from '@/app/ui/htmlMaps/tickets.html';
-
-
+import Image from 'next/image';
+import ticketMap from '@/app/ui/htmlMaps/tickets.png';
+import zoomedOut from '@/app/ui/htmlMaps/zoomedOut.png';
 
 const SlidingReel = () => {
-  const [expandedBox, setExpandedBox] = useState<number | null>(null); // Ensure type is number | null
-  const htmlFiles = ['@/app/ui/htmlMaps/tickets.html', '@/app/ui/htmlMaps/tickets.html']; // Replace with your HTML map files
+  const [expandedBox, setExpandedBox] = useState<number | null>(null);
 
+  const pics = [ticketMap, zoomedOut, ticketMap];
 
   const handleClick = (index: number) => {
     const isSameBox = expandedBox === index;
     setExpandedBox(isSameBox ? null : index);
   };
-  
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen bg-gradient-to-tr from-slate-800 to-slate-950 bg-pink-300">
-      <div className="flex overflow-x-auto space-x-4 p-4">
-        {htmlFiles.map((file, index) => (
+    <div className="grid items-center justify-items-center min-h-screen">
+      <div className="flex space-x-4 p-4">
+        {pics.map((file, index) => (
           <div
             key={index}
-            className={`transition-transform duration-300 ease-in-out ${
-              expandedBox === index ? 'w-full h-full' : 'w-60 h-60'
-            } flex-shrink-0 bg-white rounded-lg shadow-md cursor-pointer`}
+            className={`relative transition-transform duration-500 ease-in-out ${
+              expandedBox === index ? 'w-[80vw] h-[80vh]' : 'w-60 h-60'
+            } flex-shrink-0 bg-white rounded-lg shadow-md cursor-pointer overflow-hidden`}
             onClick={() => handleClick(index)}
           >
             {expandedBox === index ? (
-              <iframe
+              <Image
                 src={file}
-                title={`Map ${index + 1}`}
-                className="w-full h-full"
-                style={{ border: 'none' }}
+                alt={`Map ${index + 1}`}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
               />
             ) : (
               <div className="flex items-center justify-center h-full text-2xl font-bold">
