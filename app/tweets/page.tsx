@@ -16,14 +16,14 @@ const MessageFetcher = () => {
     const fetchMessage = async () => {
       try {
         // GET request to first API endpoint
-        const response = await fetch('http://localhost:8000/api/tweet');
+        const response = await fetch('https://hackharvard2024.uk.r.appspot.com/api/tweet');
         const data = await response.json();
         
         // Update messages state
         setMessages(prevMessages => [ data.message, ...prevMessages]);
         
         // POST request to second API endpoint
-        const postResponse = await fetch('http://localhost:8000/api/tweet-sentiment', {
+        const postResponse = await fetch('https://hackharvard2024.uk.r.appspot.com/api/tweet-sentiment', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
