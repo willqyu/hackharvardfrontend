@@ -6,6 +6,7 @@ import LoadingSpinner from './spinner';
 import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
 import Letter from './letter';
+import Typewriter from 'typewriter-effect';
 
 export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState("");
@@ -162,10 +163,16 @@ export default function CameraImageCapture() {
 
 
   return (
-    <div className="min-h-screen h-screen w-screen overflow-y-auto bg-white">
-      <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-lg p-4 mx-auto">
-        <h1 className="text-4xl md:text-5xl mt-12 font-bold text-black">
-          Be the Change
+    <div className="min-h-screen h-screen w-screen overflow-y-auto bg-transparent">
+      <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-3xl p-4 mx-auto">
+        <h1 className={`${camStarted ? 'text-xl' : 'text-7xl h-72'} md:text-5xl mt-52 font-bold text-black`}>
+          <Typewriter 
+            options={{
+              strings: ['Be the change.', 'Make a difference.', 'Inspire action.'],
+              autoStart: true,
+              loop: true,
+            }}
+          />
         </h1>
         {!camStarted && (
           <button
@@ -176,7 +183,7 @@ export default function CameraImageCapture() {
           </button>
         )}
 
-      {camStarted &&(
+      {camStarted &&  (
         <div className={`transition-all duration-700 ease-in-out transform ${
           isCapturing ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
         } flex justify-between space-x-8 mt-4`}
@@ -233,23 +240,23 @@ export default function CameraImageCapture() {
               </div>)}
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="aspect-[9/16] w-full">
-            <img
-              src={capturedImage}
-              alt="Captured"
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
+          <div className="space-y-4 ">
+            <div className="inset-x-0 bottom-0 aspect-[9/16] w-7/8 rounded-2xl bg-gradient-to-r from-slate-50 to-slate-100 backdrop-blur shadow-xl">
+              <img
+                src={capturedImage}
+                alt="Captured"
+                className="w-full h-full object-cover rounded-2xl p-2"
+              />
+              {capturedImage && address && 
+                <p className="px-6 text-center py-5">
+                  Address: {address}
+                </p>}
+            </div>
             {isLoading ? (
               <LoadingSpinner />
-            ) : (
-              <p className="text-center py-4">
-                Add a comment to describe the issue, or use the AI-generated summary.
-              </p>
-            )}
+            ) : <></>}
             <textarea
-              className="h-[150px] w-full border-2 p-1.5 rounded-2xl focus:outline-none text-sm"
+              className="h-[100px] w-full p-4 shadow-inner border rounded-2xl focus:outline-none text-md bg-gradient-to-r from-stone-50 to-stone-100"
               placeholder="Add a comment..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
@@ -259,7 +266,7 @@ export default function CameraImageCapture() {
           </div>
         )}
 
-        {capturedImage && address && <p className="mt-4">Address: {address}</p>}
+       
 
         {showLetter && (
           <div ref={letterRef}>
