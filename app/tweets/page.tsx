@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useTransition, useState, useEffect } from 'react';
 import GradientGauge from './GradientGauge';
 
 const MessageFetcher = () => {
@@ -63,8 +63,8 @@ const NotificationWindow = ({ messages }) => (
     <h1 className="text-3xl font-bold mb-4 text-center shadow-xl text-white">Live Tweet Analysis</h1>
     {messages.map((message, index) => (
       <div key={index} 
-      
       className="flex items-center shadow-inner border border-x-gray-400 mb-2 p-4 bg-white rounded-2xl"
+      style={{ animation: 'slide-in 0.7s ease-out' }}
       >
         <div className="w-6 h-6 bg-gradient-to-tr from-slate-700 to-slate-800 shadow-2xl drop-shadow rounded-full flex-shrink-0 mr-4"></div>
         <span className="flex-grow">{message}</span>
