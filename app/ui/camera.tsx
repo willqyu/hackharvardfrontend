@@ -165,7 +165,7 @@ export default function CameraImageCapture() {
   return (
     <div className="min-h-screen h-screen w-screen overflow-y-auto bg-transparent">
       <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-3xl p-4 mx-auto">
-        <h1 className={`${camStarted ? 'text-xl' : 'text-7xl h-72'} md:text-5xl mt-52 font-bold text-black`}>
+        <h1 className={`${camStarted ? 'text-xl' : 'text-7xl h-72'} md:text-5xl mt-52 font-bold text-white `}>
           <Typewriter 
             options={{
               strings: ['Be the change.', 'Make a difference.', 'Inspire action.'],
@@ -176,7 +176,7 @@ export default function CameraImageCapture() {
         </h1>
         {!camStarted && (
           <button
-            className="px-6 py-2 bg-gradient-to-r from-slate-900 to-slate-700 text-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-slate-950 focus:outline-none"
+            className="px-6 py-2 bg-gradient-to-r from-slate-50 to-slate-100 text-slate-900 rounded-2xl shadow-lg shadow-slate-600 hover:shadow-xl transition-shadow duration-300 hover:bg-white focus:outline-none"
             onClick={startCamera}
           >
             Start Camera
@@ -189,7 +189,7 @@ export default function CameraImageCapture() {
         } flex justify-between space-x-8 mt-4`}
       >
         <Button
-          className="border border-slate-200 text-black bg-transparent px-6 py-2 rounded-2xl shadow-lg hover:bg-black hover:text-white transition-all duration-300"
+          className=" border-slate-200 border-2 text-white bg-transparent px-6 py-2 rounded-2xl shadow- hover:bg-slate-200 hover:text-white transition-all duration-300 shadow-slate-700"
           onClick={() => {
             setCapturedImage('');
             setComment('');
@@ -241,22 +241,23 @@ export default function CameraImageCapture() {
           </div>
         ) : (
           <div className="space-y-4 ">
-            <div className="inset-x-0 bottom-0 aspect-[9/16] w-7/8 rounded-2xl bg-gradient-to-r from-slate-50 to-slate-100 backdrop-blur shadow-xl">
+            <div className="inset-x-0 bottom-0 aspect-[9/16] w-7/8 rounded-2xl bg-gradient-to-br from-slate-950 to-black shadow-slate-800 backdrop-blur shadow-sm">
               <img
                 src={capturedImage}
                 alt="Captured"
                 className="w-full h-full object-cover rounded-2xl p-2"
               />
               {capturedImage && address && 
-                <p className="px-6 text-center py-5">
+                <p className="px-6 text-center text-white py-5">
                   Address: {address}
-                </p>}
+                </p>
+}
             </div>
             {isLoading ? (
               <LoadingSpinner />
             ) : <></>}
             <textarea
-              className="h-[100px] w-full p-4 shadow-inner border rounded-2xl focus:outline-none text-md bg-gradient-to-r from-stone-50 to-stone-100"
+              className="h-[100px] w-full p-4 shadow-inner border rounded-2xl focus:outline-none text-md bg-slate-500/10 text-white placeholder-white"
               placeholder="Add a comment..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
