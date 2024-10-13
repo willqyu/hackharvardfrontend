@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import LoadingSpinner from './spinner';
 import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
+import { reportPayload } from './submit_report';
 import Letter from './letter';
 import Typewriter from 'typewriter-effect';
 
@@ -14,12 +15,13 @@ export default function CameraImageCapture() {
   const [camStarted, setCamStarted] = useState(false)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const [comment, setComment] = useState('');
-  const [reportType, setReportType] = useState('');
+  const [reportType, setReportType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [address, setAddress] = useState('');
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
-  const [timestamp, setTimestamp] = useState<number | null>(null);
+  const [latitude, setLatitude] = useState<number>(0);
+  const [longitude, setLongitude] = useState<number>(0);
+  const [timestamp, setTimestamp] = useState<number>(0);
+  const [letterContents, setLetter] = useState<string>("");
 
   const videoRef = useRef<HTMLVideoElement | null>(null);;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -96,12 +98,6 @@ export default function CameraImageCapture() {
       console.log(data);
       setComment(data.message);
       setReportType(data.feature);
-
-      // to pop to letter
-      setShowLetter(true);
-      setTimeout(() => letterRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
-
-
     } catch (error) {
       console.error('Error sending image to endpoint:', error);
       setComment('Failed to analyze image. Please try again.');
@@ -109,6 +105,32 @@ export default function CameraImageCapture() {
       setIsLoading(false);
     }
   };
+
+  const getLetter = async () => {
+    const payload: reportPayload = {
+        type: reportType,
+        image: capturedImage,
+        comment: comment,
+        timestamp: timestamp,
+        latitude: latitude,
+        longitude: longitude,
+    }
+    const response = await fetch(backendAPI + '/api/get-letter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate letter');
+      }
+      const data = await response.json();
+      setLetter(data.message);
+      setShowLetter(true);
+      setTimeout(() => letterRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+  }
 
   const stopCamera = () => {
     if (streamRef.current) {
@@ -267,7 +289,6 @@ export default function CameraImageCapture() {
           </div>
         )}
 
-       
 
         {showLetter && (
           <div ref={letterRef}>
@@ -278,6 +299,7 @@ export default function CameraImageCapture() {
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>
     </div>
+
   );
   
 }
