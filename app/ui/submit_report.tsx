@@ -47,6 +47,7 @@ const SubmitReport = ({
 
   return (
     <Button
+      className="px-6 py-2 bg-gradient-to-r from-slate-900 to-slate-700 text-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 hover:bg-slate-950 focus:outline-none"
       onClick={() =>
         sendReportToEndpoint({
           type,
