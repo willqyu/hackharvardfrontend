@@ -31,10 +31,10 @@ export default function Letter({
   };
 
   return (
-    <div className="p-6 border rounded-lg shadow-md bg-gray-50 w-full h-screen">
+    <div className="p-6 border rounded-lg shadow-md bg-gray-50 w-full h-content">
       <h2 className="text-2xl font-bold mb-4 w-full text-center">Your Letter</h2>
   
-      <label className="text-xs text-gray-500 mb-1 w-full">Title</label>
+      <label className="text-xs text-gray-500 mb-1 w-full">Subject</label>
       <input
         className="mb-4 p-2 border rounded-lg text-sm w-full"
         placeholder={isLoading ? "Title loading..." : "Enter the title..."}
@@ -45,7 +45,7 @@ export default function Letter({
   
       <label className="text-xs text-gray-500 mb-1 w-full">Body</label>
       <textarea
-        className="flex-grow p-4 border rounded-lg text-sm resize-vertical min-h-[20vh] w-full overflow-auto"
+        className="flex-grow p-4 border rounded-lg text-sm resize-vertical min-h-[60vh] w-full overflow-auto"
         placeholder={isLoading ? "Body loading..." : "Start your letter..."}
         value={body}
         onChange={handleBodyChange}

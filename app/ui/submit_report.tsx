@@ -32,23 +32,23 @@ const SubmitReport = ({
         console.log("Submit button clicked. Sending report...", reportData);
 
         try {
-        const response = await fetch(`${backendAPI}/api/submit-report`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reportData),
-        });
+            const response = await fetch(`${backendAPI}/api/submit-report`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reportData),
+            });
 
-        if (!response.ok) {
-            throw new Error('Failed to upload report');
-        }
+            if (!response.ok) {
+                throw new Error('Failed to upload report');
+            }
 
-        onSubmitCallback();
+            onSubmitCallback();
 
-        } catch (error) {
-        console.error('Error sending image to endpoint:', error);
-        }
+            } catch (error) {
+            console.error('Error sending image to endpoint:', error);
+            }
     };
 
   return (
