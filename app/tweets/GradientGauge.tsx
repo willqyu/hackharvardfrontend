@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
 
-const GradientGauge = ({ value }) => {
+const GradientGauge = ({ value }: {value: number}) => {
   // Ensure the value stays within the 0-10 range
   const clampedValue = Math.max(0, Math.min(value, 10));
-  const needleRef = useRef(null); // Create a ref for the needle
+  const needleRef = useRef<HTMLDivElement>(null); // Create a ref for the needle
 
   useEffect(() => {
     // Calculate the needle position based on the value (scale from 0 to 10)

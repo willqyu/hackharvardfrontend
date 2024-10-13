@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import GradientGauge from './GradientGauge';
 
 const MessageFetcher = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<string[]>([]);
   const [totalSentiment, setTotalSentiment] = useState<number>(0);
   const [sentimentCount, setSentimentCount] = useState<number>(0);
   const [avgSentiment, setAvgSentiment] = useState<number>(0);
@@ -58,7 +58,7 @@ const MessageFetcher = () => {
 };
 
 
-const NotificationWindow = ({ messages }) => (
+const NotificationWindow = ({ messages } : {messages: string[]}) => (
   <div className=" border border-black shadow-lg shadow-slate-700 bg-gradient-to-b from-slate-900 to-slate-950 rounded-2xl p-4 overflow-y-auto w-11/12 h-3/4 m-auto">
     <h1 className="text-3xl font-bold mb-4 text-center shadow-xl text-white">Live Tweet Analysis</h1>
     {messages.map((message, index) => (
