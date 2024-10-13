@@ -15,32 +15,6 @@ export default function Letter({
   const [body, setBody] = useState(initialBody);
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchGeneratedBody = async () => {
-  //     try {
-  //       const response = await fetch("/api/generate-body", {
-  //         method: "POST", 
-  //         headers: {"Content-Type": "application/json"}, 
-  //         body: JSON.stringify({ prompt: "Write a detailed report body." })
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to generate body");
-  //       }
-
-  //       const data = await Response.json();
-  //       setBody(data.body);
-  //     } catch (error) {
-  //       console.error("Error fetching generated body:", error);
-  //       setBody("Failed to load body. Please try again.");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchGeneratedBody(); // call the backend on component mount
-  // }, []);
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -57,31 +31,34 @@ export default function Letter({
   };
 
   return (
-    <div className="p-6 border rounded-lg shadow-md bg-gray-50 w-full h-screen flex flex-col">
-      <h2 className="text-2xl font-bold mb-4">Your Letter</h2>
-      <label className="text-xs text-gray-500 mb-1">Title</label>
+    <div className="p-6 border rounded-lg shadow-md bg-gray-50 w-full h-screen">
+      <h2 className="text-2xl font-bold mb-4 w-full text-center">Your Letter</h2>
+  
+      <label className="text-xs text-gray-500 mb-1 w-full">Title</label>
       <input
-        className="mb-4 p-2 border rounded-lg text-sm"
-        placeholder={isLoading ? ("Title loading...") : "Enter the title..."}
+        className="mb-4 p-2 border rounded-lg text-sm w-full"
+        placeholder={isLoading ? "Title loading..." : "Enter the title..."}
         value={title}
         onChange={handleTitleChange}
         disabled={isLoading}
       />
-      <label className="text-xs text-gray-500 mb-1">Body</label>
+  
+      <label className="text-xs text-gray-500 mb-1 w-full">Body</label>
       <textarea
-        className="flex-grow p-4 border rounded-lg text-sm resize-vertical min-h-[20vh] overflow-auto"
+        className="flex-grow p-4 border rounded-lg text-sm resize-vertical min-h-[20vh] w-full overflow-auto"
         placeholder={isLoading ? "Body loading..." : "Start your letter..."}
         value={body}
         onChange={handleBodyChange}
         disabled={isLoading}
       />
+  
       <button
-        className="mt-4 p-2 bg-blue-500 text-white rounded-lg"
+        className="mt-4 p-2 bg-blue-500 text-white rounded-lg w-full"
         onClick={handleSendEmail}
         disabled={isLoading}
       >
         Send Email
       </button>
     </div>
-  );
+  );  
 }

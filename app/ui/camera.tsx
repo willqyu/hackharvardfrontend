@@ -7,10 +7,12 @@ import SubmitReport from './submit_report';
 import { backendAPI } from "@/lib/config";
 import { reportPayload } from './submit_report';
 import Letter from './letter';
+import Typewriter from 'typewriter-effect';
 
 export default function CameraImageCapture() {
   const [capturedImage, setCapturedImage] = useState("");
   const [isCapturing, setIsCapturing] = useState(false);
+  const [camStarted, setCamStarted] = useState(false)
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const [comment, setComment] = useState('');
   const [reportType, setReportType] = useState<string>('');
@@ -33,6 +35,7 @@ export default function CameraImageCapture() {
   const startCamera = async () => {
     try {
         setIsCapturing(false);
+        setCamStarted(true);
         if (streamRef.current) {
           const tracks = streamRef.current.getTracks();
           tracks.forEach(track => track.stop());
@@ -182,90 +185,121 @@ export default function CameraImageCapture() {
 
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>Camera Image Capture</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="min-h-screen h-screen w-screen overflow-y-auto bg-transparent">
+      <div className="flex flex-col items-center justify-center space-y-8 w-full max-w-3xl p-4 mx-auto">
+        <h1 className={`${camStarted ? 'text-xl' : 'text-7xl h-72'} md:text-5xl mt-52 font-bold text-white `}>
+          <Typewriter 
+            options={{
+              strings: ['Be the change.', 'Make a difference.', 'Inspire action.'],
+              autoStart: true,
+              loop: true,
+            }}
+          />
+        </h1>
+        {!camStarted && (
+          <button
+            className="px-6 py-2 bg-gradient-to-r from-slate-50 to-slate-100 text-slate-900 rounded-2xl shadow-lg shadow-slate-600 hover:shadow-xl transition-shadow duration-300 hover:bg-white focus:outline-none"
+            onClick={startCamera}
+          >
+            Start Camera
+          </button>
+        )}
+
+      {camStarted &&  (
+        <div className={`transition-all duration-700 ease-in-out transform ${
+          isCapturing ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+        } flex justify-between space-x-8 mt-4`}
+      >
+        <Button
+          className=" border-slate-200 border-2 text-white bg-transparent px-6 py-2 rounded-2xl shadow- hover:bg-slate-200 hover:text-white transition-all duration-300 shadow-slate-700"
+          onClick={() => {
+            setCapturedImage('');
+            setComment('');
+            setAddress('');
+            startCamera();
+          }}
+        >
+          Retake Photo
+        </Button>
+  
+        <SubmitReport
+          type={reportType}
+          image={capturedImage}
+          comment={comment}
+          timestamp={timestamp ?? 0}
+          latitude={latitude ?? 0}
+          longitude={longitude ?? 0}
+        />
+      </div>
+      )}
+    
         {!capturedImage ? (
-          <div className="relative bg-gray-100 rounded-lg overflow-hidden h-[600px]">
-            <video ref={videoRef} autoPlay playsInline className="w-full h-full object-fit" />
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              <Button
-                onClick={async () => {
-                  const image = captureImage();
-                  if (image) {
-                    await sendImageToEndpoint(image);
-                  }
-                }}
-                disabled={isLoading}
-              >
-                <Camera className="mr-2 h-4 w-4" /> Capture
-              </Button>
-              <Button onClick={toggleCamera} variant="outline">
-                <RotateCw className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <img src={capturedImage} alt="Captured" className="w-full rounded-lg" />
-            {isLoading ? <LoadingSpinner /> : <p>Add a comment to describe the issue, or use the AI-generated comment.</p>}
-            <div className="border-gray-300 border-2 box-border p-2 rounded-lg overflow-hidden">
-              <textarea
-                className="h-[200px] w-full focus:outline-none text-sm"
-                placeholder={isLoading ? 'Analyzing image...' : 'Add a comment...'}
-                value={comment}
-                onChange={handleCommentChange}
-                disabled={isLoading}
+          <div className="relative rounded-lg">
+            <div
+              className={`transition-all duration-700 ease-in-out transform ${
+                isCapturing ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+              } rounded-lg h-full w-full max-w-lg mt-`}
+            >
+            <div className="aspect-[9/16]">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover rounded-lg"
               />
             </div>
+            </div>
+            {isCapturing && (  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <Button
+                  onClick={async () => {
+                    const image = captureImage();
+                    if (image) await sendImageToEndpoint(image);
+                  }}
+                  disabled={isLoading}
+                >
+                  <Camera className="mr-2 h-4 w-4 bg-gradient-to-r from-slate-800 to-slate-95 opacity-45" /> Capture
+                </Button>
+              </div>)}
           </div>
-        )}
-        <div className="mt-4">
-          {capturedImage && address && <p>Address: {address}</p>}
-        </div>
-      </CardContent>
-  
-      <CardFooter className="flex justify-between">
-        {!capturedImage ? (
-          <Button onClick={startCamera}>Start Camera</Button>
         ) : (
-          <div className="flex justify-between w-full">
-            <Button
-              onClick={() => {
-                setCapturedImage('');
-                setComment('');
-                setAddress('');
-                startCamera();
-              }}
-            >
-              Retake Photo
-            </Button>
-            <SubmitReport
-              type={reportType}
-              image={capturedImage}
-              comment={comment}
-              timestamp={timestamp ?? 0}
-              latitude={latitude ?? 0}
-              longitude={longitude ?? 0}
-              onSubmitCallback={() => {
-                getLetter()
-              }}
+          <div className="space-y-4 ">
+            <div className="inset-x-0 bottom-0 aspect-[9/16] w-7/8 rounded-2xl bg-gradient-to-br from-slate-950 to-black shadow-slate-800 backdrop-blur shadow-sm">
+              <img
+                src={capturedImage}
+                alt="Captured"
+                className="w-full h-full object-cover rounded-2xl p-2"
+              />
+              {capturedImage && address && 
+                <p className="px-6 text-center text-white py-5">
+                  Address: {address}
+                </p>
+}
+            </div>
+            {isLoading ? (
+              <LoadingSpinner />
+            ) : <></>}
+            <textarea
+              className="h-[100px] w-full p-4 shadow-inner border rounded-2xl focus:outline-none text-md bg-slate-500/10 text-white placeholder-white"
+              placeholder="Add a comment..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              disabled={isLoading}
             />
+
           </div>
         )}
-      </CardFooter>
-  
-      {/* Letter component, rendered conditionally */}
-      {showLetter && (
-        <div ref={letterRef}>
-          <Letter recipient="John Doe" initialTitle={"Citizen Concern: "+reportType + ", " + address} initialBody={letterContents} />
-        </div>
-      )}
-  
-      <canvas ref={canvasRef} style={{ display: 'none' }} />
-    </Card>
+
+
+        {showLetter && (
+          <div ref={letterRef}>
+            <Letter recipient="John Doe" initialTitle={title} initialBody={comment} />
+          </div>
+        )}
+
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
+      </div>
+    </div>
+
   );
   
 }
